@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Boren – SBB Binnenafbouw</title>
+  <meta name="description" content="Uitleg over verschillende boormachines, toepassingen en materiaalkeuze." />
+  <link rel="icon" href="binnenafbouw.png" />
+  <style>
+    :root{
+      --sbb-red:#7C1829; --text:#212121; --bg:#FFFFFF;
+      --g1:#A9A9A9; --g2:#F9F9F9;
+      --radius:14px; --shadow:0 8px 24px rgba(0,0,0,.08);
+      --maxw:1100px;
+    }
+    html{scroll-behavior:smooth;}
+    body{margin:0; background:var(--bg); color:var(--text);
+      font-family: Helvetica, "Helvetica Neue", "Helvetica Condensed", Arial, "Arial Narrow", system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", sans-serif; line-height:1.55;}
+    a{color:var(--sbb-red); text-decoration:none} a:hover{text-decoration:underline}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(160%) blur(6px);
+      background:linear-gradient(to bottom, rgba(255,255,255,.92), rgba(255,255,255,.82)); border-bottom:1px solid var(--g2);}
+    .topbar{display:flex; align-items:center; gap:16px; max-width:var(--maxw); margin:0 auto; padding:10px 16px;}
+    .logo{display:flex; align-items:center; gap:10px} .logo img{height:36px; width:auto}
+    .brand{font-weight:700; letter-spacing:.2px}
+    nav{margin-left:auto; display:flex; align-items:center; gap:12px}
+    .lang{position:relative;}
+    .lang summary{list-style:none; cursor:pointer; padding:8px 12px; border:1px solid var(--g2); border-radius:999px; background:#fff; font-size:14px;}
+    .lang[open] summary{box-shadow:var(--shadow)}
+    .lang ul{position:absolute; right:0; margin:8px 0 0 0; padding:8px; background:#fff; border:1px solid var(--g2); border-radius:12px; box-shadow:var(--shadow); min-width:180px; list-style:none;}
+    .lang a{display:block; padding:8px 10px; border-radius:8px} .lang a:hover{background:var(--g2); text-decoration:none}
+    .hero{max-width:var(--maxw); margin:18px auto; padding:0 16px 4px; display:grid; gap:16px; grid-template-columns: 1fr;}
+    .hero h1{margin:8px 0 0; font-weight:800; letter-spacing:.3px;}
+    .video{border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); background:#000; aspect-ratio:16/9;}
+    .video iframe{width:100%; height:100%; border:0}
+    .toc{max-width:var(--maxw); margin:8px auto 20px; padding:12px 16px; background:var(--g2); border:1px solid var(--g2); border-radius:var(--radius);}
+    .toc h2{font-size:18px; margin:4px 0 8px} .toc ol{margin:0; padding-left:18px} .toc li{margin:6px 0}
+    section{max-width:var(--maxw); margin:20px auto; padding:0 16px}
+    h2{margin:8px 0 12px; font-size:24px}
+    .grid{display:grid; gap:16px; grid-template-columns: repeat(3, 1fr);} /* 3 per rij (3 boven, 3 onder) */
+    .card{background:#fff; border:1px solid var(--g2); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; min-height:100%;}
+    .card img{width:100%; height:180px; object-fit:contain; background:#fff}
+    /* Extra spacing boven specifieke afbeeldingen */
+    .img-top-space{margin-top:10px;}
+    .card .body{padding:14px}
+    .chip{display:inline-block; font-size:12px; font-weight:600; color:#fff; background:var(--sbb-red); padding:4px 8px; border-radius:999px; margin-bottom:8px;}
+    /* Pro/Con bullets */
+    ul.clean{margin:8px 0 0 0; padding-left:0; list-style:none}
+    ul.clean li{margin:6px 0; padding-left:26px; position:relative}
+    ul.clean li::before{
+      content:""; position:absolute; left:0; top:2px; width:18px; height:18px; border-radius:50%; border:1px solid var(--g1); display:inline-grid; place-items:center; font-size:12px; line-height:1;
+      background:#fff;
+    }
+    ul.clean li.pro::before{content:"✔︎"; color:#157347; border-color:#157347;}
+    ul.clean li.con::before{content:"✖︎"; color:#B00020; border-color:#B00020;}
+    .matrix{border:1px solid var(--g2); border-radius:var(--radius); overflow:hidden;}
+    .mat-row{display:grid; grid-template-columns: 200px 1fr; border-top:1px solid var(--g2);} .mat-row:first-child{border-top:none}
+    .mat-key{background:var(--g2); padding:10px 12px; font-weight:700; display:flex; align-items:center;}
+    .mat-val{padding:10px 12px; display:flex; flex-wrap:wrap; gap:10px}
+    .pill{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--g2); border-radius:999px; padding:6px 10px; background:#fff;}
+    footer{margin-top:40px; border-top:1px solid var(--g2); background:#fff;}
+    .footwrap{max-width:var(--maxw); margin:0 auto; padding:18px 16px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-size:14px;}
+    .muted{color:#555}
+  
+    /* TOC two-column layout + CTA button */
+    .toc{display:grid; grid-template-columns:1fr auto; align-items:center; gap:16px}
+    .toc-left h2{margin:4px 0 8px}
+    .toc .cta{justify-self:end}
+    .btn{display:inline-block; padding:10px 14px; border-radius:999px; border:1px solid var(--sbb-red); background:var(--sbb-red); color:#fff; font-weight:700; text-decoration:none; box-shadow:var(--shadow)}
+    .btn:hover{text-decoration:none; filter:brightness(0.95)}
+    @media (max-width:700px){
+      .toc{grid-template-columns:1fr}
+      .toc .cta{justify-self:start}
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="logo">
+        <img src="binnenafbouw.png" alt="SBB Binnenafbouw logo" />
+      </div>
+      <nav>
+        <details class="lang">
+          <summary>🌐 Nederlands</summary>
+          <ul>
+            <li><a href="https://sbb-binnenafbouw.github.io/boren/nl">Nederlands</a></li>
+            <li><a href="https://sbb-binnenafbouw.github.io/boren/en">English</a></li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Boren: keuze, gebruik en materiaal</h1>
+      <div class="video">
+        <iframe src="https://player.vimeo.com/video/1123486989?title=0&byline=0&portrait=0"
+          allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Introductie: Boren"></iframe>
+      </div>
+    </div>
+
+    <nav class="toc">
+      <div class="toc-left">
+        <h2>Inhoud</h2>
+      <ol>
+        <li><a href="#boortypes">Overzicht boormachines</a></li>
+        <li><a href="#matrix">Type boormachine per materiaal</a></li>
+      </ol>
+      </div>
+      <div class="cta">
+        <a class="btn" href="https://sbb-binnenafbouw.github.io/LMRA/" role="button">Doe de LMRA checklist voordat je begint met werken</a>
+      </div>
+    </nav>
+
+    <section id="boortypes">
+      <h2>Overzicht boormachines</h2>
+      <div class="grid">
+        <!-- Accuboormachine -->
+        <article class="card" id="accuboormachine">
+          <img class="img-top-space" src="Accuboormachine.png" alt="Accuboormachine" />
+          <div class="body">
+            <span class="chip">Accuboormachine</span>
+            <p>Veelzijdig voor lichte klussen in hout, kunststof en dun metaal. Dankzij de accu werk je snoerloos en flexibel. Sommige modellen hebben een klopfunctie voor licht steenwerk; handig bij ophangen en montage.</p>
+            <ul class="clean">
+              <li class="pro">Schroeven en boren in hout, kunststof en gips</li>
+              <li class="pro">Draadloos werken</li>
+              <li class="con">Accu opladen noodzakelijk</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Klopboormachine -->
+        <article class="card" id="klopboormachine">
+          <img src="Klopboormachine.png" alt="Klopboormachine" />
+          <div class="body">
+            <span class="chip">Klopboormachine</span>
+            <p>Geschikt als je door harder materiaal zoals baksteen moet boren. Combineert rotatie met een snelle kloppende beweging, ideaal om iets stevig in de muur te bevestigen.</p>
+            <ul class="clean">
+              <li class="pro">Boren in hout, metaal en zachte steensoorten</li>
+              <li class="pro">Draaiende beweging + klopfunctie</li>
+              <li class="con">Vaak met snoer (minder flexibel)</li>
+              <li class="con">Niet voor beton</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Boorhamer -->
+        <article class="card" id="boorhamer">
+          <img src="Boorhamer.png" alt="Boorhamer" />
+          <div class="body">
+            <span class="chip">Boorhamer</span>
+            <p>Voor het zware werk. De krachtige hamerfunctie slaat door hard beton en natuursteen. Geschikt voor funderingsklussen of grote gaten (leidingen).</p>
+            <ul class="clean">
+              <li class="pro">Boren in beton en harde steensoorten</li>
+              <li class="pro">Zeer hoge slagkracht</li>
+              <li class="con">Niet geschikt voor hout, metaal of zacht steen</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Slagmoeraanzetter -->
+        <article class="card" id="slagmoeraanzetter">
+          <img class="img-top-space" src="Slagmoeraanzetter.png" alt="Slagmoeraanzetter" />
+          <div class="body">
+            <span class="chip">Slagmoeraanzetter</span>
+            <p>Draait moeren en bouten snel vast of los. Handig voor grotere constructies zoals vlonders, tuinhuizen of zware meubels.</p>
+            <ul class="clean">
+              <li class="pro">Los- en aandraaien van bouten en moeren</li>
+              <li class="pro">Hoge slagkracht</li>
+              <li class="con">Risico op doordraaien/beschadiging</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Kolomboormachine -->
+        <article class="card" id="kolomboormachine">
+          <img class="img-top-space" src="Kolomboormachine.png" alt="Kolomboormachine" />
+          <div class="body">
+            <span class="chip">Kolomboormachine</span>
+            <p>Voor zeer nauwkeurig boorwerk. Staat vast op een standaard, zodat je kaarsrechte gaten maakt in hout, metaal of kunststof.</p>
+            <ul class="clean">
+              <li class="pro">Zeer exact boren (hout, metaal, kunststof)</li>
+              <li class="pro">Geschikt voor kleine/precisie-werkstukken</li>
+              <li class="con">Alleen te gebruiken vanaf de vaste standaard</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Breekhamer -->
+        <article class="card" id="breekhamer">
+          <img src="Breekhamer.png" alt="Breekhamer" />
+          <div class="body">
+            <span class="chip">Breekhamer</span>
+            <p>Grof sloopgereedschap. Verwijdert tegels en opent betonnen vloeren. Niet bedoeld om te boren, wél om te breken en te beitelen.</p>
+            <ul class="clean">
+              <li class="pro">Breken en beitelen</li>
+              <li class="pro">Geschikt voor zwaar sloopwerk</li>
+              <li class="con">Niet om mee te boren</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="matrix">
+      <h2>Type boormachine per materiaal</h2>
+      <div class="matrix">
+        <div class="mat-row">
+          <div class="mat-key">Hout / Gips / Kunststof</div>
+          <div class="mat-val">
+            <span class="pill">Accuboormachine (schroeven/boren)</span>
+            <span class="pill">Kolomboormachine (nauwkeurig boren)</span>
+          </div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-key">Hout, Metaal, Steen</div>
+          <div class="mat-val">
+            <span class="pill">Klopboormachine</span>
+          </div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-key">Beton</div>
+          <div class="mat-val">
+            <span class="pill">Boorhamer</span>
+          </div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-key">Schroeven / Bout &amp; Moer</div>
+          <div class="mat-val">
+            <span class="pill">Slagmoeraanzetter</span>
+            <span class="pill">Accuboormachine (licht schroefwerk)</span>
+          </div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-key">Hout / Kunststof / Metaal</div>
+          <div class="mat-val">
+            <span class="pill">Kolomboormachine</span>
+          </div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-key">Breken / Beitelen</div>
+          <div class="mat-val">
+            <span class="pill">Breekhamer</span>
+          </div>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:8px">Let op: kies ook de juiste boorbits (hout, metaal, steen, SDS) en let op toeren/slaginstellingen.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footwrap">
+      <div>© <span id="yr"></span> SBB Binnenafbouw</div>
+      <div>
+        <a href="https://sbb-binnenafbouw.github.io/boren/nl">/boren/nl</a> ·
+        <a href="https://sbb-binnenafbouw.github.io/boren/en">/boren/en</a>
+      </div>
+    </div>
+  </footer>
+  <script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+</body>
+</html>
